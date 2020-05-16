@@ -215,4 +215,20 @@
 
     </changeSet>
 
+  <changeSet id="htmlformentry_html_form_add_enterprise_uuid" author="BFT">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <columnExists tableName="htmlformentry_html_form" columnName="enterprise_uuid"/>
+            </not>
+        </preConditions>
+
+        <comment>
+            Update htmlformentry_html_form table to contain enterprise_uuid column
+        </comment>
+
+        <addColumn tableName="htmlformentry_html_form">
+            <column name="enterprise_uuid" type="char(38)"/>
+        </addColumn>
+    </changeSet>
+
 </databaseChangeLog>

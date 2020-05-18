@@ -23,7 +23,12 @@ import org.openmrs.Person;
 import org.openmrs.Program;
 import org.openmrs.api.context.Context;
 import org.openmrs.api.impl.BaseOpenmrsService;
-import org.openmrs.module.htmlformentry.*;
+import org.openmrs.module.htmlformentry.BadFormDesignException;
+import org.openmrs.module.htmlformentry.FormEntrySession;
+import org.openmrs.module.htmlformentry.HtmlForm;
+import org.openmrs.module.htmlformentry.HtmlFormEntryService;
+import org.openmrs.module.htmlformentry.HtmlFormEntryUtil;
+import org.openmrs.module.htmlformentry.SerializableFormObject;
 import org.openmrs.module.htmlformentry.db.HtmlFormEntryDAO;
 import org.openmrs.module.htmlformentry.element.PersonStub;
 import org.openmrs.module.htmlformentry.handler.TagHandler;
@@ -107,6 +112,7 @@ public class HtmlFormEntryServiceImpl extends BaseOpenmrsService implements Html
     
     @Override
     public HtmlForm saveHtmlForm(HtmlForm htmlForm) {
+		String enterpriseUuid = getDefaultEnterprise();
         if (htmlForm.getCreator() == null)
             htmlForm.setCreator(Context.getAuthenticatedUser());
         if (htmlForm.getDateCreated() == null)
@@ -115,6 +121,9 @@ public class HtmlFormEntryServiceImpl extends BaseOpenmrsService implements Html
             htmlForm.setChangedBy(Context.getAuthenticatedUser());
             htmlForm.setDateChanged(new Date());
         }
+		if (htmlForm.getEnterpriseUuid() == null)
+			htmlForm.setEnterpriseUuid(enterpriseUuid);
+		
         Context.getFormService().saveForm(htmlForm.getForm());
         return dao.saveHtmlForm(htmlForm);
     }
@@ -325,4 +334,14 @@ public class HtmlFormEntryServiceImpl extends BaseOpenmrsService implements Html
     public void reprocessArchivedForm(String path) throws Exception {
         reprocessArchivedForm(path,true);
     }
+	
+	private String getDefaultEnterprise() {
+		String enterpriseValue = "";
+		if (Context.getAuthenticatedUser() != null && Context.getAuthenticatedUser().getPerson() != null
+		        && Context.getAuthenticatedUser().getPerson().getAttribute("Enterprise") != null) {
+			enterpriseValue = Context.getAuthenticatedUser().getPerson().getAttribute("Enterprise").getValue();
+		}
+		return enterpriseValue;
+	}
+	
 }

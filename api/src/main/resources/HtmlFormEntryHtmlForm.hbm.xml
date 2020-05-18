@@ -40,6 +40,8 @@
 		<property name="dateRetired" type="java.util.Date" column="date_retired" />
 	
 		<property name="retireReason" type="string" column="retire_reason" />
+		
+		<property name="enterpriseUuid" type="string" column="enterprise_uuid" />
 
 	</class>
 

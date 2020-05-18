@@ -26,6 +26,8 @@ public class HtmlForm extends BaseOpenmrsMetadata {
 	/** Deprecated fields: this class now inherits its name and description from its form */
 	private String deprecatedName;
 	
+	private String enterpriseUuid;
+	
 	private String deprecatedDescription;
 	
 	/** Allows HtmlForm to be shared via Metadata Sharing Module **/
@@ -44,6 +46,18 @@ public class HtmlForm extends BaseOpenmrsMetadata {
 	@Override
     public void setId(Integer id) {
 		this.id = id;
+	}
+	
+	/** Gets the unique identifying enterprise_uuid for this HTML Form */
+	/** @Override */
+	public String getEnterpriseUuid() {
+		return enterpriseUuid;
+	}
+	
+	/** Sets the unique identifying enterprise_uuid for this HTML Form */
+	/** @Override */
+	public void setEnterpriseUuid(String enterpriseUuid) {
+		this.enterpriseUuid = enterpriseUuid;
 	}
 	
 	/** Gets the Form object this HTML Form is associated with */

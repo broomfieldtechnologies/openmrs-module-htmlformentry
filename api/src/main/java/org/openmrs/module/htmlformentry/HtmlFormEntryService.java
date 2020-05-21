@@ -56,11 +56,20 @@ public interface HtmlFormEntryService extends OpenmrsService {
     public List<HtmlForm> getAllHtmlForms();
     
     /**
-     * Saves the specified HTML Form to the database
-     * 
-     * @param form the HTML Form to save
-     * @return the HTML Form saved
-     */
+	 * Retrieves all HTML Forms in the system within the Enterprise
+	 * 
+	 * @return a list of all HTML Forms in the system within the Enterprise
+	 * @should return all html forms within the Enterprise
+	 */
+	@Transactional(readOnly = true)
+	public List<HtmlForm> getAllHtmlFormsbyEnterpriseUuid(String enterpriseUuid);
+	
+	/**
+	 * Saves the specified HTML Form to the database
+	 * 
+	 * @param form the HTML Form to save
+	 * @return the HTML Form saved
+	 */
     @Transactional
     public HtmlForm saveHtmlForm(HtmlForm form);
     

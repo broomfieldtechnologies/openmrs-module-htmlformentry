@@ -3,6 +3,7 @@ package org.openmrs.module.htmlformentry.web.controller;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.openmrs.EncounterType;
+import org.openmrs.api.context.Context;
 import org.openmrs.module.htmlformentry.HtmlFormEntryUtil;
 import org.openmrs.propertyeditor.EncounterTypeEditor;
 import org.springframework.stereotype.Controller;
@@ -26,7 +27,12 @@ public class HtmlFormsController {
 	 */
 	@RequestMapping("/module/htmlformentry/htmlForms")
 	public void manageHtmlForms(Model model) {
-		model.addAttribute("forms", HtmlFormEntryUtil.getService().getAllHtmlForms());
+		String enterpriseUuid = "";
+		if (Context.getAuthenticatedUser() != null && Context.getAuthenticatedUser().getPerson() != null
+		        && Context.getAuthenticatedUser().getPerson().getAttribute("Enterprise") != null) {
+			enterpriseUuid = Context.getAuthenticatedUser().getPerson().getAttribute("Enterprise").getValue();
+		}	
+		model.addAttribute("forms", HtmlFormEntryUtil.getService().getAllHtmlFormsbyEnterpriseUuid(enterpriseUuid));
 	}	
 
 }

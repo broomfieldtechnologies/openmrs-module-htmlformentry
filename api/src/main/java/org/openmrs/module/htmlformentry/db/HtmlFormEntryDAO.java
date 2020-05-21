@@ -58,6 +58,8 @@ public interface HtmlFormEntryDAO {
      * @return
      */
     public List<HtmlForm> getAllHtmlForms();
+	
+	public List<HtmlForm> getAllHtmlFormsbyEnterpriseUuid(String enterpriseUuid);
 
 	/**
 	 * @see HtmlFormEntryService#needsNameAndDescriptionMigration()

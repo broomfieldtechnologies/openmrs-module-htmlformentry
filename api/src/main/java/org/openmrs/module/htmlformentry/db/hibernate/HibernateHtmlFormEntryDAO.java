@@ -6,7 +6,6 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.hibernate.Criteria;
 import org.hibernate.Query;
-import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Expression;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
@@ -58,16 +57,28 @@ public class HibernateHtmlFormEntryDAO implements HtmlFormEntryDAO {
     @SuppressWarnings("unchecked")
     public List<HtmlForm> getAllHtmlForms() {
     	Query query = sessionFactory.getCurrentSession().createQuery("from HtmlForm order by form.name asc");
-    	return (List<HtmlForm>) query.list();
+    	return query.list();
     }
 
     @Override
     @SuppressWarnings("unchecked")
+	public List<HtmlForm> getAllHtmlFormsbyEnterpriseUuid(String enterpriseUuid) {
+		List<HtmlForm> listx;
+		Query query = sessionFactory.getCurrentSession()
+		        .createQuery(
+		            "from HtmlForm f where f.enterpriseUuid = :enterpriseUuid order by form.name asc");
+		query.setString("enterpriseUuid", enterpriseUuid);
+		listx = query.list();
+		return listx;
+	}
+	
+	@Override
+	@SuppressWarnings("unchecked")
     public HtmlForm getHtmlFormByForm(Form form) {
         Criteria crit = sessionFactory.getCurrentSession().createCriteria(HtmlForm.class);
         crit.add(Restrictions.eq("form", form));
         crit.addOrder(Order.desc("dateCreated"));
-        List<HtmlForm> list = (List<HtmlForm>) crit.list();
+        List<HtmlForm> list = crit.list();
         if (list.size() >= 1)
             return list.get(0);
         else
@@ -87,7 +98,7 @@ public class HibernateHtmlFormEntryDAO implements HtmlFormEntryDAO {
 	    if (roleName != null)
 	        query += " and ur.role = '" + roleName + "' ";
 	     query += " order by familyName ";
-	    return (List<PersonStub>) sessionFactory.getCurrentSession().createSQLQuery(query)
+	    return sessionFactory.getCurrentSession().createSQLQuery(query)
 	    .addScalar("id")
 	    .addScalar("givenName")
 	    .addScalar("familyName")
@@ -149,6 +160,6 @@ public class HibernateHtmlFormEntryDAO implements HtmlFormEntryDAO {
 		{
 			query = query + " and value='" + attributeValue + "'";
 		}
-	    return (List<Integer>)sessionFactory.getCurrentSession().createSQLQuery(query).list();
+	    return sessionFactory.getCurrentSession().createSQLQuery(query).list();
     }
 }

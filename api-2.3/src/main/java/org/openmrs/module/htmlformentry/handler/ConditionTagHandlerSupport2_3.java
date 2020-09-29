@@ -8,7 +8,7 @@ import org.openmrs.module.htmlformentry.ConditionElement;
 import org.openmrs.module.htmlformentry.FormEntrySession;
 import org.openmrs.module.htmlformentry.FormSubmissionController;
 
-@OpenmrsProfile(openmrsPlatformVersion = "2.3.1")
+@OpenmrsProfile(openmrsPlatformVersion = "2.3.0")
 public class ConditionTagHandlerSupport2_3 implements ConditionTagHandlerSupport {
 	
 	private ConditionElement conditionElement;

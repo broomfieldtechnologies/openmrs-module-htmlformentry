@@ -17,7 +17,6 @@ import org.openmrs.DosingInstructions;
 import org.openmrs.Drug;
 import org.openmrs.DrugOrder;
 import org.openmrs.EncounterProvider;
-import org.openmrs.FreeTextDosingInstructions;
 import org.openmrs.Order;
 import org.openmrs.Order.Action;
 import org.openmrs.OrderFrequency;
@@ -272,7 +271,7 @@ public class DrugOrderSubmissionElement1_10 extends DrugOrderSubmissionElement {
 			for (Drug drug : drugsUsedAsKey) {
 				if (context.getExistingOrders().containsKey(drug.getConcept())) {
 					//this will return null if Order is not a DrugOrder even if matched by Concept
-					DrugOrder drugOrder = (DrugOrder) context.removeExistingDrugOrder(drug);
+					DrugOrder drugOrder = context.removeExistingDrugOrder(drug);
 					
 					if (drugOrder != null) {
 						//start from the first order for that drug
@@ -429,7 +428,7 @@ public class DrugOrderSubmissionElement1_10 extends DrugOrderSubmissionElement {
 		drugOrder.setCareSetting(Context.getOrderService().getCareSetting(orderTag.careSettingId));
 		OrderFrequency orderFrequency = Context.getOrderService().getOrderFrequency(Integer.valueOf(orderTag.frequency));
 		drugOrder.setFrequency(orderFrequency);
-		drugOrder.setDateActivated(orderTag.startDate);
+		drugOrder.setDateActivated(session.getEncounter().getEncounterDatetime());
 		drugOrder.setNumRefills(orderTag.numRefills);
 		//order duration:
 		if (orderTag.orderDuration != null)
@@ -437,7 +436,7 @@ public class DrugOrderSubmissionElement1_10 extends DrugOrderSubmissionElement {
 		drugOrder.setVoided(false);
 		drugOrder.setOrderType(Context.getOrderService().getOrderTypeByUuid(DRUG_ORDER_TYPE_UUID));
 		if (!StringUtils.isEmpty(orderTag.instructions))
-			drugOrder.setInstructions((String) orderTag.instructions);
+			drugOrder.setInstructions(orderTag.instructions);
 		
 		DrugOrder discontinuationOrder = createDiscontinuationOrderIfNeeded(drugOrder, orderTag.discontinuedDate,
 		    orderTag.discontinuedReasonStr);
@@ -490,7 +489,7 @@ public class DrugOrderSubmissionElement1_10 extends DrugOrderSubmissionElement {
 			if (orderTag.orderDuration != null)
 				revisedOrder.setAutoExpireDate(calculateAutoExpireDate(orderTag.startDate, orderTag.orderDuration));
 			if (!StringUtils.isEmpty(orderTag.instructions))
-				revisedOrder.setInstructions((String) orderTag.instructions);
+				revisedOrder.setInstructions(orderTag.instructions);
 			
 			log.debug("modifying drug order, drugId is " + orderTag.drugId + " and startDate is " + orderTag.startDate);
 			session.getSubmissionActions().getCurrentEncounter().setDateChanged(new Date());

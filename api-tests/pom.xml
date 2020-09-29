@@ -40,10 +40,17 @@
 			<artifactId>htmlformentry-api-2.0</artifactId>
 			<version>${project.parent.version}</version>
 		</dependency>
+			<dependency>
+            	<groupId>javax.servlet</groupId>
+            	<artifactId>javax.servlet-api</artifactId>
+            	<version>3.0.1</version>
+            	<scope>provided</scope>
+        	</dependency>
+		
 		<dependency>
 			<groupId>org.openmrs.api</groupId>
 			<artifactId>openmrs-api</artifactId>
-			<version>${openMRSVersion}</version>
+			<version>1.9.9</version>
 			<exclusions>
 				<exclusion>
 					<artifactId>javassist</artifactId>
@@ -54,7 +61,7 @@
 		<dependency>
 			<groupId>org.openmrs.api</groupId>
 			<artifactId>openmrs-api</artifactId>
-			<version>${openMRSVersion}</version>
+			<version>1.9.9</version>
 			<classifier>tests</classifier>
 			<exclusions>
 				<exclusion>
@@ -75,7 +82,7 @@
 		<dependency>
 			<groupId>org.openmrs.test</groupId>
 			<artifactId>openmrs-test</artifactId>
-			<version>${openMRSVersion}</version>
+			<version>1.9.9</version>
 			<type>pom</type>
 			<exclusions>
 				<exclusion>
@@ -87,7 +94,7 @@
 		<dependency>
 			<groupId>org.openmrs.web</groupId>
 			<artifactId>openmrs-web</artifactId>
-			<version>${openMRSVersion}</version>
+			<version>1.9.9</version>
 		</dependency>
 
 		<!-- jars we need to provide for compile but that will be provided at runtime 

@@ -66,7 +66,8 @@
         </dependency>
         <dependency>
 			<groupId>org.openmrs.module</groupId>
-			<artifactId>legacyui-api</artifactId>
+			<artifactId>legacyui-omod</artifactId>
+			<version>1.5.0</version>
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
@@ -128,14 +129,14 @@
 				<artifactId>maven-openmrs-plugin</artifactId>
 				<extensions>true</extensions>
 				<executions>
-					<execution>
+ 					<execution>
 						<id>init</id>
 						<phase>initialize</phase>
 						<goals>
 							<goal>initialize-module</goal>
 						</goals>
 					</execution>
-					<execution>
+ 					<execution>
 						<id>pack</id>
 						<phase>package</phase>
 						<goals>
@@ -143,6 +144,7 @@
 						</goals>
 					</execution>
 				</executions>
+
 			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>

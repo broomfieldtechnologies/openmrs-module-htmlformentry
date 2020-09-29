@@ -35,10 +35,14 @@ import org.openmrs.module.htmlformentry.SerializableFormObject;
 import org.openmrs.module.htmlformentry.db.HtmlFormEntryDAO;
 import org.openmrs.module.htmlformentry.element.PersonStub;
 import org.openmrs.module.htmlformentry.handler.TagHandler;
+import org.springframework.stereotype.Component;
 
 /**
  * Standard implementation of the HtmlFormEntryService
  */
+
+@Component
+
 public class HtmlFormEntryServiceImpl extends BaseOpenmrsService implements HtmlFormEntryService {
 	
 	protected final Log log = LogFactory.getLog(getClass());

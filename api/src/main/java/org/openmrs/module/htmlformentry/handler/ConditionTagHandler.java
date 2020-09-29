@@ -9,7 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 public class ConditionTagHandler extends SubstitutionTagHandler {
 	
-	@Autowired
+	@Autowired(required = false)
 	private ConditionTagHandlerSupport handler;
 	
 	@Override

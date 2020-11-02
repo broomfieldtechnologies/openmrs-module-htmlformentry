@@ -10,6 +10,7 @@ import org.openmrs.ConceptDatatype;
 import org.openmrs.ConceptName;
 import org.openmrs.DrugOrder;
 import org.openmrs.Encounter;
+import org.openmrs.EncounterRole;
 import org.openmrs.EncounterType;
 import org.openmrs.Form;
 import org.openmrs.Location;
@@ -21,6 +22,7 @@ import org.openmrs.PatientProgram;
 import org.openmrs.Program;
 import org.openmrs.api.ProgramWorkflowService;
 import org.openmrs.api.context.Context;
+import org.openmrs.module.providermanagement.Provider;
 import org.openmrs.obs.ComplexData;
 import org.openmrs.test.BaseModuleContextSensitiveTest;
 import org.openmrs.test.Verifies;
@@ -275,8 +277,8 @@ public class HtmlFormEntryUtilTest extends BaseModuleContextSensitiveTest {
 	public void getConcept_shouldFindAConceptByItsMapping() throws Exception {
 		String id = "XYZ:HT";
 		Concept cpt = HtmlFormEntryUtil.getConcept(id);
-		Assert.assertEquals("XYZ", cpt.getConceptMappings().iterator().next().getSource().getName());
-		Assert.assertEquals("HT", cpt.getConceptMappings().iterator().next().getSourceCode());
+		Assert.assertEquals("XYZ", cpt.getConceptMappings().iterator().next().getConcept().getName());
+		Assert.assertEquals("HT", cpt.getConceptMappings().iterator().next().getConcept().getName());
 	}
 	
 	/**
@@ -358,8 +360,8 @@ public class HtmlFormEntryUtilTest extends BaseModuleContextSensitiveTest {
 	public void getConcept_shouldFindAConceptByItsMappingWithASpaceInBetween() throws Exception {
 		String id = "XYZ: HT";
 		Concept cpt = HtmlFormEntryUtil.getConcept(id);
-		Assert.assertEquals("XYZ", cpt.getConceptMappings().iterator().next().getSource().getName());
-		Assert.assertEquals("HT", cpt.getConceptMappings().iterator().next().getSourceCode());
+		Assert.assertEquals("XYZ", cpt.getConceptMappings().iterator().next().getConcept().getName());
+		Assert.assertEquals("HT", cpt.getConceptMappings().iterator().next().getConcept());
 	}
 	
 	/**
@@ -439,7 +441,10 @@ public class HtmlFormEntryUtilTest extends BaseModuleContextSensitiveTest {
 		e.setDateCreated(new Date());
 		e.setEncounterDatetime(date);
 		e.setLocation(Context.getLocationService().getLocation(2));
-		e.setProvider(Context.getPersonService().getPerson(502));
+		EncounterRole erole= new EncounterRole();
+		Provider provider = new Provider();
+		provider.setPerson(Context.getPersonService().getPerson(502));
+		e.setProvider(erole, provider);
 		
 		//add a bunch of obs...
 		TestUtil.addObs(e, 2474, Context.getConceptService().getConcept(656), date); //matches
@@ -468,8 +473,10 @@ public class HtmlFormEntryUtilTest extends BaseModuleContextSensitiveTest {
 		e.setDateCreated(new Date());
 		e.setEncounterDatetime(date);
 		e.setLocation(Context.getLocationService().getLocation(2));
-		e.setProvider(Context.getPersonService().getPerson(502));
-		
+		EncounterRole erole= new EncounterRole();
+		Provider provider = new Provider();
+		provider.setPerson(Context.getPersonService().getPerson(502));
+		e.setProvider(erole, provider);		
 		//add a bunch of obs...
 		TestUtil.addObs(e, 2474, Context.getConceptService().getConcept(656), date); //matches
 		TestUtil.addObs(e, 3017, Context.getConceptService().getConcept(767), date); //matches
@@ -538,19 +545,21 @@ public class HtmlFormEntryUtilTest extends BaseModuleContextSensitiveTest {
 		e.setDateCreated(new Date());
 		e.setEncounterDatetime(date);
 		e.setLocation(Context.getLocationService().getLocation(2));
-		e.setProvider(Context.getPersonService().getPerson(502));
-		TestUtil.addObs(e, 1, 5000, date); //a matching obs
+		EncounterRole erole= new EncounterRole();
+		Provider provider = new Provider();
+		provider.setPerson(Context.getPersonService().getPerson(502));
+		e.setProvider(erole, provider);		TestUtil.addObs(e, 1, 5000, date); //a matching obs
 		
 		DrugOrder dor = new DrugOrder();
 		dor.setVoided(false);
 		dor.setConcept(Context.getConceptService().getConcept(792));
 		dor.setCreator(Context.getUserService().getUser(1));
 		dor.setDateCreated(new Date());
-		dor.setDiscontinued(false);
+		dor.setVoided(false);
 		dor.setDrug(Context.getConceptService().getDrug(2));
 		dor.setOrderType(Context.getOrderService().getOrderType(1));
 		dor.setPatient(Context.getPatientService().getPatient(2));
-		dor.setStartDate(new Date());
+		dor.setDateActivated(new Date());
 		e.addOrder(dor);
 		
 		Context.getEncounterService().saveEncounter(e);
@@ -588,19 +597,21 @@ public class HtmlFormEntryUtilTest extends BaseModuleContextSensitiveTest {
 		e.setDateCreated(new Date());
 		e.setEncounterDatetime(date);
 		e.setLocation(Context.getLocationService().getLocation(2));
-		e.setProvider(Context.getPersonService().getPerson(502));
-		TestUtil.addObs(e, 3, 5000, date);//adding an un-matched Obs
+		EncounterRole erole= new EncounterRole();
+		Provider provider = new Provider();
+		provider.setPerson(Context.getPersonService().getPerson(502));
+		e.setProvider(erole, provider);		TestUtil.addObs(e, 3, 5000, date);//adding an un-matched Obs
 		
 		DrugOrder dor = new DrugOrder();
 		dor.setVoided(false);
 		dor.setConcept(Context.getConceptService().getConcept(792));
 		dor.setCreator(Context.getUserService().getUser(1));
 		dor.setDateCreated(new Date());
-		dor.setDiscontinued(false);
+		dor.setVoided(false);
 		dor.setDrug(Context.getConceptService().getDrug(2));
 		dor.setOrderType(Context.getOrderService().getOrderType(1));
 		dor.setPatient(Context.getPatientService().getPatient(2));
-		dor.setStartDate(new Date());
+		dor.setDateActivated(new Date());
 		e.addOrder(dor);
 		
 		Context.getEncounterService().saveEncounter(e);
@@ -635,8 +646,10 @@ public class HtmlFormEntryUtilTest extends BaseModuleContextSensitiveTest {
 		e.setDateCreated(new Date());
 		e.setEncounterDatetime(date);
 		e.setLocation(Context.getLocationService().getLocation(2));
-		e.setProvider(Context.getPersonService().getPerson(502));
-		TestUtil.addObs(e, 3, 5000, date);//adding an un-matched, voided Obs
+		EncounterRole erole= new EncounterRole();
+		Provider provider = new Provider();
+		provider.setPerson(Context.getPersonService().getPerson(502));
+		e.setProvider(erole, provider);		TestUtil.addObs(e, 3, 5000, date);//adding an un-matched, voided Obs
 		for (Obs o : e.getAllObs(true)) {
 			o.setVoided(true);
 			o.setVoidedBy(Context.getUserService().getUser(1));
@@ -650,7 +663,7 @@ public class HtmlFormEntryUtilTest extends BaseModuleContextSensitiveTest {
 		dor.setConcept(Context.getConceptService().getConcept(792));
 		dor.setCreator(Context.getUserService().getUser(1));
 		dor.setDateCreated(new Date());
-		dor.setDiscontinued(false);
+		dor.setVoided(false);
 		dor.setDrug(Context.getConceptService().getDrug(2));
 		dor.setOrderType(Context.getOrderService().getOrderType(1));
 		dor.setPatient(Context.getPatientService().getPatient(2));
@@ -658,7 +671,7 @@ public class HtmlFormEntryUtilTest extends BaseModuleContextSensitiveTest {
 		dor.setVoidedBy(Context.getUserService().getUser(1));
 		dor.setVoidReason("blah");
 		dor.setDateVoided(new Date());
-		dor.setStartDate(new Date());
+		dor.setDateActivated(new Date());
 		e.addOrder(dor);
 		
 		Context.getEncounterService().saveEncounter(e);
@@ -1098,7 +1111,7 @@ public class HtmlFormEntryUtilTest extends BaseModuleContextSensitiveTest {
 
         LocationTag tag = HtmlFormEntryUtil.getLocationTag("Some Tag");
         Assert.assertNotNull(tag);
-        Assert.assertEquals("Some Tag", tag.getTag());
+        Assert.assertEquals("Some Tag", tag.getName());
     }
 
     @Test
@@ -1109,7 +1122,7 @@ public class HtmlFormEntryUtilTest extends BaseModuleContextSensitiveTest {
 
         LocationTag tag = HtmlFormEntryUtil.getLocationTag("1001");
         Assert.assertNotNull(tag);
-        Assert.assertEquals("Some Tag", tag.getTag());
+        Assert.assertEquals("Some Tag", tag.getName());
     }
 
 	@Test

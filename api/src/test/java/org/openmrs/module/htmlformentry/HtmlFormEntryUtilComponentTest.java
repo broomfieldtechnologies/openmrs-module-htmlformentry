@@ -61,7 +61,7 @@ public class HtmlFormEntryUtilComponentTest extends BaseModuleContextSensitiveTe
     @Ignore
     public void getProviders_shouldReturnProvidersForSingleRole() {
         ProviderRole providerRole = Context.getService(ProviderManagementService.class).getProviderRole(1002);
-        List<Provider> providers = HtmlFormEntryUtil.getProviders(Collections.singletonList(providerRole));
+        List<Provider> providers = HtmlFormEntryUtil.getProviders(Collections.singletonList(providerRole), "test");
         assertThat(providers.size(), is(1));
         assertThat(providers.get(0).getId(), is(1006));
     }
@@ -74,7 +74,7 @@ public class HtmlFormEntryUtilComponentTest extends BaseModuleContextSensitiveTe
         providerRoles.add(Context.getService(ProviderManagementService.class).getProviderRole(1001));
         providerRoles.add(Context.getService(ProviderManagementService.class).getProviderRole(1002));
 
-        List<Provider> providers = HtmlFormEntryUtil.getProviders(providerRoles);
+        List<Provider> providers = HtmlFormEntryUtil.getProviders(providerRoles, "test");
         assertThat(providers.size(), is(4));
 
         List<Integer> resultProviderIds = Arrays.asList(1003,1004,1005, 1006);
@@ -88,21 +88,21 @@ public class HtmlFormEntryUtilComponentTest extends BaseModuleContextSensitiveTe
     @Ignore
     public void getProviders_shouldReturnEmptyListIfNoMatches() {
         ProviderRole providerRole = Context.getService(ProviderManagementService.class).getProviderRole(1004);
-        List<Provider> providers = HtmlFormEntryUtil.getProviders(Collections.singletonList(providerRole));
+        List<Provider> providers = HtmlFormEntryUtil.getProviders(Collections.singletonList(providerRole), "test");
         assertThat(providers.size(), is(0));
     }
 
     @Test
     @Ignore
     public void getProviders_shouldReturnEmptyListIfPassedNull() {
-        List<Provider> providers = HtmlFormEntryUtil.getProviders(null);
+        List<Provider> providers = HtmlFormEntryUtil.getProviders(null, "test");
         assertThat(providers.size(), is(0));
     }
 
     @Test
     @Ignore
     public void getProviders_shouldReturnEmptyListIfPassedEmptyList() {
-        List<Provider> providers = HtmlFormEntryUtil.getProviders(new ArrayList<ProviderRole>());
+        List<Provider> providers = HtmlFormEntryUtil.getProviders(new ArrayList<ProviderRole>(), "test");
         assertThat(providers.size(), is(0));
     }
 

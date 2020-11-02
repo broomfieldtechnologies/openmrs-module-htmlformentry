@@ -4,6 +4,7 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.openmrs.Encounter;
+import org.openmrs.EncounterRole;
 import org.openmrs.EncounterType;
 import org.openmrs.Form;
 import org.openmrs.Obs;
@@ -14,6 +15,7 @@ import org.openmrs.module.htmlformentry.schema.HtmlFormField;
 import org.openmrs.module.htmlformentry.schema.HtmlFormSchema;
 import org.openmrs.module.htmlformentry.schema.ObsField;
 import org.openmrs.module.htmlformentry.schema.ObsGroup;
+import org.openmrs.module.providermanagement.Provider;
 import org.openmrs.obs.ComplexData;
 import org.openmrs.test.BaseModuleContextSensitiveTest;
 import org.springframework.mock.web.MockHttpServletRequest;
@@ -556,7 +558,10 @@ public class RegressionTest extends BaseModuleContextSensitiveTest {
 				e.setDateCreated(new Date());
 				e.setEncounterDatetime(date);
 				e.setLocation(Context.getLocationService().getLocation(2));
-				e.setProvider(Context.getPersonService().getPerson(502));
+				EncounterRole erole = new EncounterRole();
+				Provider provider = new Provider();
+				provider.setPerson(Context.getPersonService().getPerson(502));
+				e.setProvider(erole, provider);
 				return e;
 			}
 
@@ -584,7 +589,10 @@ public class RegressionTest extends BaseModuleContextSensitiveTest {
 				e.setDateCreated(new Date());
 				e.setEncounterDatetime(date);
 				e.setLocation(Context.getLocationService().getLocation(2));
-				e.setProvider(Context.getPersonService().getPerson(502));
+				EncounterRole erole = new EncounterRole();
+				Provider provider = new Provider();
+				provider.setPerson(Context.getPersonService().getPerson(502));
+				e.setProvider(erole, provider);
 				TestUtil.addObs(e, 2, 12.3, null); // weight has conceptId 2
 				return e;
 			}
@@ -613,7 +621,10 @@ public class RegressionTest extends BaseModuleContextSensitiveTest {
 				e.setDateCreated(new Date());
 				e.setEncounterDatetime(date);
 				e.setLocation(Context.getLocationService().getLocation(2));
-				e.setProvider(Context.getPersonService().getPerson(502));
+				EncounterRole erole = new EncounterRole();
+				Provider provider = new Provider();
+				provider.setPerson(Context.getPersonService().getPerson(502));
+				e.setProvider(erole, provider);
 				TestUtil.addObs(e, 1, 965.0, null); // this is a CD4 Count
 				return e;
 			}
@@ -642,8 +653,10 @@ public class RegressionTest extends BaseModuleContextSensitiveTest {
 				e.setDateCreated(new Date());
 				e.setEncounterDatetime(date);
 				e.setLocation(Context.getLocationService().getLocation(2));
-				e.setProvider(Context.getPersonService().getPerson(502));
-
+				EncounterRole erole = new EncounterRole();
+				Provider provider = new Provider();
+				provider.setPerson(Context.getPersonService().getPerson(502));
+				e.setProvider(erole, provider);
 				// create three obsgroups with the identical structures but with different answer values for the ALLERGY CODED obs
 				TestUtil.addObsGroup(e, 7, new Date(), 1000, Context.getConceptService().getConcept(1001), new Date(), 1119,
 						date, new Date());
@@ -685,8 +698,10 @@ public class RegressionTest extends BaseModuleContextSensitiveTest {
 				e.setDateCreated(new Date());
 				e.setEncounterDatetime(date);
 				e.setLocation(Context.getLocationService().getLocation(2));
-				e.setProvider(Context.getPersonService().getPerson(502));
-
+				EncounterRole erole = new EncounterRole();
+				Provider provider = new Provider();
+				provider.setPerson(Context.getPersonService().getPerson(502));
+				e.setProvider(erole, provider);
 				TestUtil.addObsGroup(e, 7, new Date(), 
 						1000, Context.getConceptService().getConcept(1004), new Date(),
 						1002, Context.getConceptService().getConcept(1119), new Date()
@@ -728,8 +743,10 @@ public class RegressionTest extends BaseModuleContextSensitiveTest {
 				e.setDateCreated(new Date());
 				e.setEncounterDatetime(date);
 				e.setLocation(Context.getLocationService().getLocation(2));
-				e.setProvider(Context.getPersonService().getPerson(502));
-
+				EncounterRole erole = new EncounterRole();
+				Provider provider = new Provider();
+				provider.setPerson(Context.getPersonService().getPerson(502));
+				e.setProvider(erole, provider);
 				TestUtil.addObsGroup(e, 7, new Date(), 
 						1000, Context.getConceptService().getConcept(1004), new Date(),
 						1002, Context.getConceptService().getConcept(1119), new Date()
@@ -774,8 +791,10 @@ public class RegressionTest extends BaseModuleContextSensitiveTest {
 					e.setDateCreated(new Date());
 					e.setEncounterDatetime(date);
 					e.setLocation(Context.getLocationService().getLocation(2));
-					e.setProvider(Context.getPersonService().getPerson(502));
-
+					EncounterRole erole = new EncounterRole();
+					Provider provider = new Provider();
+					provider.setPerson(Context.getPersonService().getPerson(502));
+					e.setProvider(erole, provider);
 					// first create two ALLERGY CONSTRUCT obsgroups that contain ALLERGY CODED obs with different answer values
 					TestUtil.addObsGroup(e, 7, new Date(), 1000, Context.getConceptService().getConcept(1001), new Date());
 					TestUtil.addObsGroup(e, 7, new Date(), 1000, Context.getConceptService().getConcept(1002), new Date());
@@ -816,8 +835,10 @@ public class RegressionTest extends BaseModuleContextSensitiveTest {
 					e.setDateCreated(new Date());
 					e.setEncounterDatetime(date);
 					e.setLocation(Context.getLocationService().getLocation(2));
-					e.setProvider(Context.getPersonService().getPerson(502));
-
+					EncounterRole erole = new EncounterRole();
+					Provider provider = new Provider();
+					provider.setPerson(Context.getPersonService().getPerson(502));
+					e.setProvider(erole, provider);
 					// first create two ALLERGY CONSTRUCT obsgroups, both with ALLERGY CODED obs, but with different answer values
 					TestUtil.addObsGroup(e, 7, new Date(), 8, Context.getConceptService().getConcept(1001), new Date());
 					TestUtil.addObsGroup(e, 7, new Date(), 8, Context.getConceptService().getConcept(1002), new Date());
@@ -857,8 +878,10 @@ public class RegressionTest extends BaseModuleContextSensitiveTest {
 					e.setDateCreated(new Date());
 					e.setEncounterDatetime(date);
 					e.setLocation(Context.getLocationService().getLocation(2));
-					e.setProvider(Context.getPersonService().getPerson(502));
-	
+					EncounterRole erole = new EncounterRole();
+					Provider provider = new Provider();
+					provider.setPerson(Context.getPersonService().getPerson(502));
+					e.setProvider(erole, provider);	
 					// create two ALLERGY CONSTRUCT obsgroups, with different text values, one of 01/02/2003, and one with the date set to null
 					TestUtil.addObsGroup(e, 7, new Date(), 8,"Dogs", new Date(), 1119, date, new Date());
 					TestUtil.addObsGroup(e, 7, new Date(), 8, "Cats", new Date(), 1119, null, new Date());
@@ -907,8 +930,10 @@ public class RegressionTest extends BaseModuleContextSensitiveTest {
 				e.setDateCreated(new Date());
 				e.setEncounterDatetime(date);
 				e.setLocation(Context.getLocationService().getLocation(2));
-				e.setProvider(Context.getPersonService().getPerson(502));
-
+				EncounterRole erole = new EncounterRole();
+				Provider provider = new Provider();
+				provider.setPerson(Context.getPersonService().getPerson(502));
+				e.setProvider(erole, provider);
 				// first create DST parent group
 				Obs dstParent = TestUtil.createObs(e, 3040, null, date);
 				e.addObs(dstParent);
@@ -988,8 +1013,10 @@ public class RegressionTest extends BaseModuleContextSensitiveTest {
 				e.setDateCreated(new Date());
 				e.setEncounterDatetime(date);
 				e.setLocation(Context.getLocationService().getLocation(2));
-				e.setProvider(Context.getPersonService().getPerson(502));
-				TestUtil.addObs(e, 6, "blah blah", null);
+				EncounterRole erole = new EncounterRole();
+				Provider provider = new Provider();
+				provider.setPerson(Context.getPersonService().getPerson(502));
+				e.setProvider(erole, provider);				TestUtil.addObs(e, 6, "blah blah", null);
 				return e;
 			}
 
@@ -1345,7 +1372,10 @@ public class RegressionTest extends BaseModuleContextSensitiveTest {
 				e.setDateCreated(new Date());
 				e.setEncounterDatetime(date);
 				e.setLocation(Context.getLocationService().getLocation(2));
-				e.setProvider(Context.getPersonService().getPerson(502));
+				EncounterRole erole = new EncounterRole();
+				Provider provider = new Provider();
+				provider.setPerson(Context.getPersonService().getPerson(502));
+				e.setProvider(erole, provider);
 				TestUtil.addObs(e, 19, "2", null); // this is a location
 				return e;
 			}
@@ -1374,8 +1404,10 @@ public class RegressionTest extends BaseModuleContextSensitiveTest {
 				e.setDateCreated(new Date());
 				e.setEncounterDatetime(date);
 				e.setLocation(Context.getLocationService().getLocation(2));
-				e.setProvider(Context.getPersonService().getPerson(502));
-				TestUtil.addObs(e, 19, "2 - Xanadu", null); // this is a location
+				EncounterRole erole = new EncounterRole();
+				Provider provider = new Provider();
+				provider.setPerson(Context.getPersonService().getPerson(502));
+				e.setProvider(erole, provider);				TestUtil.addObs(e, 19, "2 - Xanadu", null); // this is a location
 				return e;
 			}
 
@@ -1521,8 +1553,10 @@ public class RegressionTest extends BaseModuleContextSensitiveTest {
 				e.setDateCreated(new Date());
 				e.setEncounterDatetime(date);
 				e.setLocation(Context.getLocationService().getLocation(2));
-				e.setProvider(Context.getPersonService().getPerson(502));
-
+				EncounterRole erole = new EncounterRole();
+				Provider provider = new Provider();
+				provider.setPerson(Context.getPersonService().getPerson(502));
+				e.setProvider(erole, provider);
 				// create three obsgroups with the identical structures but with different answer values for the obs
 				TestUtil.addObsGroup(e, 7, new Date(), 1000, Context.getConceptService().getConcept(1002), new Date(), 8, "foo2",
 						new Date());
@@ -1571,8 +1605,10 @@ public class RegressionTest extends BaseModuleContextSensitiveTest {
 				e.setDateCreated(new Date());
 				e.setEncounterDatetime(date);
 				e.setLocation(Context.getLocationService().getLocation(2));
-				e.setProvider(Context.getPersonService().getPerson(502));
-
+				EncounterRole erole = new EncounterRole();
+				Provider provider = new Provider();
+				provider.setPerson(Context.getPersonService().getPerson(502));
+				e.setProvider(erole, provider);
 				// create three obsgroups with the identical structures but with different answer values for the obs
 				TestUtil.addObsGroup(e, 7, new Date(), 1000, Context.getConceptService().getConcept(1003), new Date(), 8, "foo3",
 						new Date());
@@ -1621,8 +1657,10 @@ public class RegressionTest extends BaseModuleContextSensitiveTest {
 				e.setDateCreated(new Date());
 				e.setEncounterDatetime(date);
 				e.setLocation(Context.getLocationService().getLocation(2));
-				e.setProvider(Context.getPersonService().getPerson(502));
-
+				EncounterRole erole = new EncounterRole();
+				Provider provider = new Provider();
+				provider.setPerson(Context.getPersonService().getPerson(502));
+				e.setProvider(erole, provider);
 				// create three obsgroups with the identical structures but with different answer values for the obs
 				TestUtil.addObsGroup(e, 7, new Date(), 1000, null, new Date(), 8, "foo1",
 						new Date());
@@ -1671,8 +1709,10 @@ public class RegressionTest extends BaseModuleContextSensitiveTest {
 				e.setDateCreated(new Date());
 				e.setEncounterDatetime(date);
 				e.setLocation(Context.getLocationService().getLocation(2));
-				e.setProvider(Context.getPersonService().getPerson(502));
-
+				EncounterRole erole = new EncounterRole();
+				Provider provider = new Provider();
+				provider.setPerson(Context.getPersonService().getPerson(502));
+				e.setProvider(erole, provider);
 				// create three obsgroups with the identical structures but with different answer values for the obs
 				TestUtil.addObsGroup(e, 7, new Date(), 1000, Context.getConceptService().getConcept(1001), new Date(), 8, "foo1",
 						new Date());
@@ -1721,8 +1761,10 @@ public class RegressionTest extends BaseModuleContextSensitiveTest {
 				e.setDateCreated(new Date());
 				e.setEncounterDatetime(date);
 				e.setLocation(Context.getLocationService().getLocation(2));
-				e.setProvider(Context.getPersonService().getPerson(502));
-
+				EncounterRole erole = new EncounterRole();
+				Provider provider = new Provider();
+				provider.setPerson(Context.getPersonService().getPerson(502));
+				e.setProvider(erole, provider);
 				// create three obsgroups with the identical structures but with different answer values for the obs
 				TestUtil.addObsGroup(e, 7, new Date(), 1000, Context.getConceptService().getConcept(1001), new Date(), 8, "foo1",
 						new Date());
@@ -1771,8 +1813,10 @@ public class RegressionTest extends BaseModuleContextSensitiveTest {
 				e.setDateCreated(new Date());
 				e.setEncounterDatetime(date);
 				e.setLocation(Context.getLocationService().getLocation(2));
-				e.setProvider(Context.getPersonService().getPerson(502));
-
+				EncounterRole erole = new EncounterRole();
+				Provider provider = new Provider();
+				provider.setPerson(Context.getPersonService().getPerson(502));
+				e.setProvider(erole, provider);
 				// create three obsgroups with the identical structures but with different answer values for the obs
 				TestUtil.addObsGroup(e, 7, new Date(), 1000, Context.getConceptService().getConcept(1001), new Date(), 8, "foo1",
 						new Date());
@@ -1821,8 +1865,10 @@ public class RegressionTest extends BaseModuleContextSensitiveTest {
 				e.setDateCreated(new Date());
 				e.setEncounterDatetime(date);
 				e.setLocation(Context.getLocationService().getLocation(2));
-				e.setProvider(Context.getPersonService().getPerson(502));
-
+				EncounterRole erole = new EncounterRole();
+				Provider provider = new Provider();
+				provider.setPerson(Context.getPersonService().getPerson(502));
+				e.setProvider(erole, provider);
 				// create three obsgroups with the identical structures but with different answer values for the obs
 				TestUtil.addObsGroup(e, 7, new Date(), 1000, null, new Date(), 8, "foo1",
 						new Date());
@@ -1871,8 +1917,10 @@ public class RegressionTest extends BaseModuleContextSensitiveTest {
 				e.setDateCreated(new Date());
 				e.setEncounterDatetime(date);
 				e.setLocation(Context.getLocationService().getLocation(2));
-				e.setProvider(Context.getPersonService().getPerson(502));
-
+				EncounterRole erole = new EncounterRole();
+				Provider provider = new Provider();
+				provider.setPerson(Context.getPersonService().getPerson(502));
+				e.setProvider(erole, provider);
 				TestUtil.addObsGroup(e, 7, new Date(), 1000, Context.getConceptService().getConcept(1004), new Date(), 8, "bar4",
 						new Date());
 				
@@ -1914,8 +1962,10 @@ public class RegressionTest extends BaseModuleContextSensitiveTest {
 				e.setDateCreated(new Date());
 				e.setEncounterDatetime(date);
 				e.setLocation(Context.getLocationService().getLocation(2));
-				e.setProvider(Context.getPersonService().getPerson(502));
-
+				EncounterRole erole = new EncounterRole();
+				Provider provider = new Provider();
+				provider.setPerson(Context.getPersonService().getPerson(502));
+				e.setProvider(erole, provider);
 				TestUtil.addObsGroup(e, 7, new Date(), 1000, null, new Date(), 8, "bar1",
 						new Date());
 
@@ -1961,8 +2011,10 @@ public class RegressionTest extends BaseModuleContextSensitiveTest {
 				e.setDateCreated(new Date());
 				e.setEncounterDatetime(date);
 				e.setLocation(Context.getLocationService().getLocation(2));
-				e.setProvider(Context.getPersonService().getPerson(502));
-
+				EncounterRole erole = new EncounterRole();
+				Provider provider = new Provider();
+				provider.setPerson(Context.getPersonService().getPerson(502));
+				e.setProvider(erole, provider);
 				TestUtil.addObsGroup(e, 7, new Date(), 1000, Context.getConceptService().getConcept(1001), new Date(), 8, "bar1", new Date());
 
 				TestUtil.addObsGroup(e, 7, new Date(), 1000, null, new Date(), 8, "bar2", new Date());
@@ -2015,8 +2067,10 @@ public class RegressionTest extends BaseModuleContextSensitiveTest {
 				e.setDateCreated(new Date());
 				e.setEncounterDatetime(date);
 				e.setLocation(Context.getLocationService().getLocation(2));
-				e.setProvider(Context.getPersonService().getPerson(502));
-
+				EncounterRole erole = new EncounterRole();
+				Provider provider = new Provider();
+				provider.setPerson(Context.getPersonService().getPerson(502));
+				e.setProvider(erole, provider);
 				TestUtil.addObsGroup(e, 7, new Date(), 1000, Context.getConceptService().getConcept(1001), new Date(), 8, "bar1", new Date());
 
 				TestUtil.addObsGroup(e, 7, new Date(), 1000, Context.getConceptService().getConcept(1002), new Date(), 8, "bar2", new Date());
@@ -2070,8 +2124,10 @@ public class RegressionTest extends BaseModuleContextSensitiveTest {
 				e.setDateCreated(new Date());
 				e.setEncounterDatetime(date);
 				e.setLocation(Context.getLocationService().getLocation(2));
-				e.setProvider(Context.getPersonService().getPerson(502));
-
+				EncounterRole erole = new EncounterRole();
+				Provider provider = new Provider();
+				provider.setPerson(Context.getPersonService().getPerson(502));
+				e.setProvider(erole, provider);
 				Obs obs = new Obs();
 				obs.setConcept(Context.getConceptService().getConcept(4));
 				obs.setValueNumeric(new Double(1));  // set this obs to a valid Boolean value 
@@ -2108,8 +2164,10 @@ public class RegressionTest extends BaseModuleContextSensitiveTest {
 				e.setDateCreated(new Date());
 				e.setEncounterDatetime(date);
 				e.setLocation(Context.getLocationService().getLocation(2));
-				e.setProvider(Context.getPersonService().getPerson(502));
-
+				EncounterRole erole = new EncounterRole();
+				Provider provider = new Provider();
+				provider.setPerson(Context.getPersonService().getPerson(502));
+				e.setProvider(erole, provider);
 				Obs obs = new Obs();
 				obs.setConcept(Context.getConceptService().getConcept(4));
 				obs.setValueNumeric(null);  // set this obs to an invalid Boolean value
@@ -2412,8 +2470,10 @@ public class RegressionTest extends BaseModuleContextSensitiveTest {
 				e.setDateCreated(new Date());
 				e.setEncounterDatetime(date);
 				e.setLocation(Context.getLocationService().getLocation(2));
-				e.setProvider(Context.getPersonService().getPerson(502));
-				
+				EncounterRole erole = new EncounterRole();
+				Provider provider = new Provider();
+				provider.setPerson(Context.getPersonService().getPerson(502));
+				e.setProvider(erole, provider);				
 				Obs obs = new Obs();
 				obs.setConcept(Context.getConceptService().getConcept(6100));
 				obs.setComplexData(new ComplexData("complex_obs_image_test.gif", image));

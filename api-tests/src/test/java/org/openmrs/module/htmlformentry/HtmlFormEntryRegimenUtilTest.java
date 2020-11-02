@@ -13,11 +13,14 @@ import org.junit.Before;
 import org.junit.Test;
 import org.openmrs.DrugOrder;
 import org.openmrs.Encounter;
+import org.openmrs.EncounterRole;
 import org.openmrs.GlobalProperty;
 import org.openmrs.Order;
 import org.openmrs.Patient;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.htmlformentry.regimen.RegimenUtil;
+import org.openmrs.module.providermanagement.Provider;
+import org.openmrs.order.DrugOrderSupport;
 import org.openmrs.order.RegimenSuggestion;
 import org.openmrs.test.BaseModuleContextSensitiveTest;
 import org.openmrs.test.Verifies;
@@ -48,7 +51,7 @@ public class HtmlFormEntryRegimenUtilTest extends BaseModuleContextSensitiveTest
 	@Test
 	@Verifies(value = "should create the correct number of DrugOrders, and they should save correctly", method = "standardRegimenToDrugOrders(RegimenSuggestion, Date, Patient)")
 	public void standardRegimenToDrugOrders_shouldCreateDrugOrders() throws Exception {
-		List<RegimenSuggestion> regList = Context.getOrderService().getStandardRegimens();
+		List<RegimenSuggestion> regList = DrugOrderSupport.getInstance().getStandardRegimens();
 		Assert.assertTrue(regList.size() > 0);
 		
 		//Add regimens to an encounter:
@@ -58,7 +61,10 @@ public class HtmlFormEntryRegimenUtilTest extends BaseModuleContextSensitiveTest
 		e.setDateCreated(new Date());
 		e.setEncounterDatetime(date);
 		e.setLocation(Context.getLocationService().getLocation(2));
-		e.setProvider(Context.getPersonService().getPerson(502));
+		EncounterRole erole= new EncounterRole();
+		Provider provider = new Provider();
+		provider.setPerson(Context.getPersonService().getPerson(502));
+		e.setProvider(erole, provider);
 		
 		//And, add some drugOrders
 		Patient p = Context.getPatientService().getPatient(2);
@@ -92,7 +98,7 @@ public class HtmlFormEntryRegimenUtilTest extends BaseModuleContextSensitiveTest
 		Encounter e = Context.getEncounterService().getEncounter(encId);
 		List<Order> dors = new ArrayList<Order>();
 		dors.addAll(e.getOrders());
-		Map<RegimenSuggestion, List<DrugOrder>>  m = RegimenUtil.findStrongestStandardRegimenInDrugOrders(Context.getOrderService().getStandardRegimens(),dors);
+		Map<RegimenSuggestion, List<DrugOrder>>  m = RegimenUtil.findStrongestStandardRegimenInDrugOrders(DrugOrderSupport.getInstance().getStandardRegimens(),dors);
 		Assert.assertTrue(m.size() > 0);
 		RegimenSuggestion rs = m.keySet().iterator().next();
 		log.debug("findStrongestStandardRegimenInDrugOrders found standard regimen " + rs.getCodeName());
@@ -112,7 +118,7 @@ public class HtmlFormEntryRegimenUtilTest extends BaseModuleContextSensitiveTest
 		Encounter e = Context.getEncounterService().getEncounter(encId);
 		List<Order> dors = new ArrayList<Order>();
 		dors.addAll(e.getOrders());
-		Map<RegimenSuggestion, List<DrugOrder>>  m = RegimenUtil.findStrongestStandardRegimenInDrugOrders(Context.getOrderService().getStandardRegimens(),dors);
+		Map<RegimenSuggestion, List<DrugOrder>>  m = RegimenUtil.findStrongestStandardRegimenInDrugOrders(DrugOrderSupport.getInstance().getStandardRegimens(),dors);
 		Assert.assertTrue(m.size() > 0);
 		RegimenSuggestion rs = m.keySet().iterator().next();
 		log.debug("findStrongestStandardRegimenInDrugOrders found standard regimen " + rs.getCodeName());
@@ -131,7 +137,7 @@ public class HtmlFormEntryRegimenUtilTest extends BaseModuleContextSensitiveTest
 		Encounter e = Context.getEncounterService().getEncounter(encId);
 		List<Order> dors = new ArrayList<Order>();
 		dors.addAll(e.getOrders());
-		Map<RegimenSuggestion, List<DrugOrder>>  m = RegimenUtil.findStrongestStandardRegimenInDrugOrders(Context.getOrderService().getStandardRegimens(),dors);
+		Map<RegimenSuggestion, List<DrugOrder>>  m = RegimenUtil.findStrongestStandardRegimenInDrugOrders(DrugOrderSupport.getInstance().getStandardRegimens(),dors);
 		Assert.assertTrue(m.size() > 0);
 		RegimenSuggestion rs = m.keySet().iterator().next();
 		log.debug("findStrongestStandardRegimenInDrugOrders found standard regimen " + rs.getCodeName());
@@ -151,9 +157,9 @@ public class HtmlFormEntryRegimenUtilTest extends BaseModuleContextSensitiveTest
 		int aDay = 1000*60*60*24;
 		int counter = 1;
 		for (Order dor : e.getOrders()){
-			dor.setStartDate(new Date((dor.getStartDate().getTime()) - (aDay * counter)));
+			dor.setDateActivated(new Date((dor.getDateActivated().getTime()) - (aDay * counter)));
 			counter ++;
-			log.debug("drugOrder now has start date " + dor.getStartDate());
+			log.debug("drugOrder now has start date " + dor.getDateActivated());
 		}
 		Context.getEncounterService().saveEncounter(e);
 		Context.flushSession();
@@ -163,7 +169,7 @@ public class HtmlFormEntryRegimenUtilTest extends BaseModuleContextSensitiveTest
 		e = Context.getEncounterService().getEncounter(encId);
 		List<Order> dors = new ArrayList<Order>();
 		dors.addAll(e.getOrders());
-		Map<RegimenSuggestion, List<DrugOrder>>  m = RegimenUtil.findStrongestStandardRegimenInDrugOrders(Context.getOrderService().getStandardRegimens(),dors);
+		Map<RegimenSuggestion, List<DrugOrder>>  m = RegimenUtil.findStrongestStandardRegimenInDrugOrders(DrugOrderSupport.getInstance().getStandardRegimens(),dors);
 		Assert.assertTrue(m.size() > 0);
 		RegimenSuggestion rs = m.keySet().iterator().next();
 		log.debug("findStrongestStandardRegimenInDrugOrders found standard regimen " + rs.getCodeName());
@@ -175,7 +181,7 @@ public class HtmlFormEntryRegimenUtilTest extends BaseModuleContextSensitiveTest
 	 * Builds an Encounter for Patient (id = 2), and adds DrugOrders to the Patient according to which StandardRegimen you want.
 	 */
 	private static Integer regimenTestBuildEncounterHelper(String code){
-		List<RegimenSuggestion> regList = Context.getOrderService().getStandardRegimens();
+		List<RegimenSuggestion> regList = DrugOrderSupport.getInstance().getStandardRegimens();
 		Assert.assertTrue(regList.size() > 0);
 		
 		//Add regimens to an encounter:
@@ -185,8 +191,10 @@ public class HtmlFormEntryRegimenUtilTest extends BaseModuleContextSensitiveTest
 		e.setDateCreated(new Date());
 		e.setEncounterDatetime(date);
 		e.setLocation(Context.getLocationService().getLocation(2));
-		e.setProvider(Context.getPersonService().getPerson(502));
-		
+		EncounterRole erole= new EncounterRole();
+		Provider provider = new Provider();
+		provider.setPerson(Context.getPersonService().getPerson(502));
+		e.setProvider(erole, provider);		
 		//And, add some drugOrders
 		Patient p = Context.getPatientService().getPatient(2);
 		Set<Order> dos = RegimenUtil.standardRegimenToDrugOrders(RegimenUtil.getStandardRegimenByCode(regList, code), new Date(), p);

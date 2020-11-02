@@ -22,8 +22,8 @@ import org.openmrs.api.APIException;
 import org.openmrs.api.context.Context;
 import org.springframework.stereotype.Component;
 
-@Component("htmlformentry.PatientServiceCompatibility")
-@OpenmrsProfile(openmrsPlatformVersion = "1.9.9 - 1.12.*")
+@Component("htmlformentry.PatientServiceCompatibility_1.9.9")
+@OpenmrsProfile(openmrsPlatformVersion = "1.9.9 - 2.*.*")
 public class PatientServiceCompatibility1_9 implements PatientServiceCompatibility {
 
 	@Override

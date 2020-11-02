@@ -11,8 +11,10 @@ import java.util.Set;
 import org.openmrs.Drug;
 import org.openmrs.DrugOrder;
 import org.openmrs.Order;
+import org.openmrs.OrderFrequency;
 import org.openmrs.Patient;
 import org.openmrs.api.context.Context;
+import org.openmrs.module.htmlformentry.HtmlFormEntryUtil;
 import org.openmrs.order.DrugSuggestion;
 import org.openmrs.order.RegimenSuggestion;
 import org.openmrs.util.OpenmrsConstants;
@@ -53,8 +55,8 @@ public class RegimenUtil {
 					DrugOrder dorToInspect = drugIdFoundInDrugSet(dc, drugOrders); //assumes patient will never have multiple drug orders of same drug in same encounter...
 					if (dorToInspect != null){ // there was a match by drug
 						if (startDate == null) // setup standard regimen start date
-							startDate = dorToInspect.getStartDate();
-						if (startDate.equals(dorToInspect.getStartDate())) //this will always be true for first drug matched.
+							startDate = dorToInspect.getEffectiveStartDate();
+						if (startDate.equals(dorToInspect.getEffectiveStartDate())) //this will always be true for first drug matched.
 							matchHolder.add(drugIdFoundInDrugSet(dc, drugOrders));
 						else {
 							//the drug was matched on drug type, but the start date was different.  This tag assumes equal start and stop dates to be a standard regimen.
@@ -106,18 +108,20 @@ public class RegimenUtil {
 			for (DrugSuggestion ds : rs.getDrugComponents()){
 				DrugOrder dor = new DrugOrder();
 				dor.setVoided(false);
-				Drug drug = Context.getConceptService().getDrugByNameOrId(ds.getDrugId());
+				Drug drug = Context.getConceptService().getDrug(ds.getDrugId());
 				if (drug == null)
 					drug = Context.getConceptService().getDrugByUuid(ds.getDrugId());
 				if (drug == null)
 					throw new RuntimeException("Your standard regimen xml file constains a drugId that can't be found, for regimen " + rs.getCodeName() + ", DrugComponent.id = " + ds.getDrugId());
-				dor.setDrug(Context.getConceptService().getDrugByNameOrId(ds.getDrugId()));
-				dor.setFrequency(ds.getFrequency());
-				dor.setUnits(ds.getUnits());
+				dor.setDrug(Context.getConceptService().getDrug(ds.getDrugId()));
+				OrderFrequency ofy = new OrderFrequency();
+				ofy.setFrequencyPerDay(Double.parseDouble(ds.getFrequency()));
+				dor.setFrequency(ofy);
+				dor.setDoseUnits(HtmlFormEntryUtil.getConcept(ds.getUnits()));
 				dor.setInstructions(ds.getInstructions());
 				dor.setDose(Double.valueOf(ds.getDose()));
-				dor.setStartDate(startDate);
-				dor.setDiscontinued(false);
+				dor.setDateActivated(startDate);
+				dor.setVoided(false);
 				dor.setPatient(patient);
 				dor.setDateChanged(new Date());
 				dor.setCreator(Context.getAuthenticatedUser());

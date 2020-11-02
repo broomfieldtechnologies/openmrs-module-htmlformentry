@@ -332,9 +332,11 @@ public class ProviderAndRoleElement implements HtmlGeneratorElement, FormSubmiss
 
         List<Provider> providerList = new ArrayList<Provider>();
 
+    	String enterpriseGuidString = Context.getLocationService().getEnterpriseForLoggedinUser();
+
         // if no provider roles specified, just return all (non-retired) providers
         if (!parameters.containsKey("providerRoles")) {
-            providerList = Context.getProviderService().getAllProviders(false);
+            providerList = Context.getProviderService().getAllProvidersForEnterprise(false,enterpriseGuidString);
         }
         else {
             // retrieve the provider roles referenced in the tag
@@ -351,9 +353,10 @@ public class ProviderAndRoleElement implements HtmlGeneratorElement, FormSubmiss
                 providerRoles.add(providerRole);
             }
 
-            providerList = HtmlFormEntryUtil.getProviders(providerRoles);
+            providerList = HtmlFormEntryUtil.getProviders(providerRoles, enterpriseGuidString);
         }
 
         return providerList;
     }
+    
 }

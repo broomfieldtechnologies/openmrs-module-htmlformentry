@@ -335,6 +335,8 @@ public class EncounterDetailSubmissionElement implements HtmlGeneratorElement, F
         }
 
         // Register Location widgets, if appropriate
+        String enterpriseGuid = Context.getLocationService().getEnterpriseForLoggedinUser();
+
         if (Boolean.TRUE.equals(parameters.get("location"))) {
 
                 locationErrorWidget = new ErrorWidget();
@@ -364,7 +366,7 @@ public class EncounterDetailSubmissionElement implements HtmlGeneratorElement, F
                     }
                     tags.add(tag);
                 }
-                locations.addAll(Context.getLocationService().getLocationsHavingAnyTag(tags));
+                locations.addAll(Context.getLocationService().getLocationsHavingAnyTagForEnterpriseGujid(tags, enterpriseGuid));
             }
             // If the "order" attribute is passed in, limit to the specified locations in order
             else if (parameters.get("order") != null) {
@@ -382,7 +384,7 @@ public class EncounterDetailSubmissionElement implements HtmlGeneratorElement, F
 
             // if no locations have been specified by the order attribute, use all non-retired locations
             if (locations.isEmpty()) {
-                locations = Context.getLocationService().getAllLocations(false);
+                locations = Context.getLocationService().getAllLocationsForEnterpriseId(false);
             }
 
             // Set default values

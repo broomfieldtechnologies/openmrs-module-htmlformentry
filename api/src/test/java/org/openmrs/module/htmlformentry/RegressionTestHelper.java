@@ -558,7 +558,7 @@ public abstract class RegressionTestHelper {
 	}
 	
 	private Encounter getLastEncounter(Patient patient) {
-		List<Encounter> encs = Context.getEncounterService().getEncounters(patient, null, null, null, null, null, null,
+		List<Encounter> encs = Context.getEncounterService().getEncounters(patient, null, null, null, null, null, null,null,null,
 		    true);
 		if (encs == null || encs.size() == 0)
 			return null;

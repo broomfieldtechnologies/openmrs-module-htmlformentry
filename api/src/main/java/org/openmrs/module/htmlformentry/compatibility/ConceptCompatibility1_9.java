@@ -17,12 +17,12 @@ import org.openmrs.ConceptNumeric;
 import org.openmrs.annotation.OpenmrsProfile;
 import org.springframework.stereotype.Component;
 
-@Component("htmlformentry.ConceptCompatibility")
-@OpenmrsProfile(openmrsPlatformVersion = "1.9.9 - 1.12.*")
+@Component("htmlformentry.ConceptCompatibility_1.9.0")
+@OpenmrsProfile(openmrsPlatformVersion = "1.9.9 - 2.*.*")
 public class ConceptCompatibility1_9 implements ConceptCompatibility {
 
 	@Override
 	public Boolean isAllowDecimal(ConceptNumeric cn) {
-		return cn.isPrecise();
+		return  cn.isAllowDecimal();
 	}
 }

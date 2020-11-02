@@ -4,11 +4,13 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.openmrs.Encounter;
+import org.openmrs.EncounterRole;
 import org.openmrs.GlobalProperty;
 import org.openmrs.Patient;
 import org.openmrs.PatientProgram;
 import org.openmrs.Person;
 import org.openmrs.PersonAddress;
+import org.openmrs.Provider;
 import org.openmrs.api.context.Context;
 import org.openmrs.test.BaseModuleContextSensitiveTest;
 import org.openmrs.util.OpenmrsConstants;
@@ -516,7 +518,10 @@ public class PatientTagTest extends BaseModuleContextSensitiveTest {
 				e.setDateCreated(new Date());
 				e.setEncounterDatetime(date);
 				e.setLocation(Context.getLocationService().getLocation(2));
-				e.setProvider(Context.getPersonService().getPerson(502));
+				EncounterRole erole = new EncounterRole();
+				Provider provider = new Provider();
+				provider.setPerson(Context.getPersonService().getPerson(502));
+				e.setProvider(erole, provider);
 				TestUtil.addObs(e, 19, "7 - Collet Test Chebaskwony", null);
 				return e;
 			}

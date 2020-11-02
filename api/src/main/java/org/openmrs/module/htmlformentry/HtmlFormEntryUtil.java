@@ -634,7 +634,7 @@ public class HtmlFormEntryUtil {
      */
 	public static Location getLocation(String id, FormEntryContext context) {
 
-		Location location = null;
+		Location location = Context.getLocationService().getDefaultLocation();
 
 		if (id != null) {
 
@@ -650,38 +650,36 @@ public class HtmlFormEntryUtil {
             }
 			// handle GlobalProperty:property.name
 			if (id.startsWith("GlobalProperty:")) {
-				String gpName = id.substring("GlobalProperty:".length());
-				String gpValue = Context.getAdministrationService().getGlobalProperty(gpName);
-				if (StringUtils.isNotEmpty(gpValue)) {
-					return getLocation(gpValue, context);
-				}
+				/*
+				 * String gpName = id.substring("GlobalProperty:".length()); String gpValue =
+				 * Context.getAdministrationService().getGlobalProperty(gpName); if
+				 * (StringUtils.isNotEmpty(gpValue)) { return getLocation(gpValue, context); }
+				 */
+				return Context.getLocationService().getDefaultLocation();
 			}
 
 			// handle UserProperty:propName
 			if (id.startsWith("UserProperty:")) {
-				String upName = id.substring("UserProperty:".length());
-				String upValue = Context.getAuthenticatedUser().getUserProperty(upName);
-				if (StringUtils.isNotEmpty(upValue)) {
-					return getLocation(upValue, context);
-				}
+				/*
+				 * String upName = id.substring("UserProperty:".length()); String upValue =
+				 * Context.getAuthenticatedUser().getUserProperty(upName); if
+				 * (StringUtils.isNotEmpty(upValue)) { return getLocation(upValue, context); }
+				 */
+				return Context.getLocationService().getDefaultLocation();
 			}
             // handle SessionAttribute:attributeName
             if (id.startsWith("SessionAttribute:")) {
-                if (context.getHttpSession() == null) {
-                    // if we don't have access to a session, e.g. when validating a form, we can't do anything
-                    return null;
-                }
-                String saName = id.substring("SessionAttribute:".length());
-                Object saValue = context.getHttpSession().getAttribute(saName);
-                if (saValue == null) {
-                    return null;
-                } else if (saValue instanceof Location) {
-                    return (Location) saValue;
-                } else if (saValue instanceof String) {
-                    return getLocation((String) saValue, context);
-                } else {
-                    return getLocation(saValue.toString(), context);
-                }
+				/*
+				 * if (context.getHttpSession() == null) { // if we don't have access to a
+				 * session, e.g. when validating a form, we can't do anything return null; }
+				 * String saName = id.substring("SessionAttribute:".length()); Object saValue =
+				 * context.getHttpSession().getAttribute(saName); if (saValue == null) { return
+				 * null; } else if (saValue instanceof Location) { return (Location) saValue; }
+				 * else if (saValue instanceof String) { return getLocation((String) saValue,
+				 * context); } else { return getLocation(saValue.toString(), context); }
+				 */
+				return Context.getLocationService().getDefaultLocation();
+
             }
 
             // see if this is parseable int; if so, try looking up by id
@@ -1091,7 +1089,8 @@ public class HtmlFormEntryUtil {
 				}
             }
             locations =  new ArrayList<Location>();
-            locations.addAll(Context.getLocationService().getLocationsHavingAnyTag(tags));
+            String enterpriseGuid = Context.getLocationService().getEnterpriseForLoggedinUser();
+            locations.addAll(Context.getLocationService().getLocationsHavingAnyTagForEnterpriseGujid(tags, enterpriseGuid));
         }
         return locations;
     }
@@ -2053,7 +2052,7 @@ public class HtmlFormEntryUtil {
 
 	}
 
-	public static List<Provider> getProviders(List<ProviderRole> providerRoles) {
+	public static List<Provider> getProviders(List<ProviderRole> providerRoles, String enterpriseGuid) {
 
 		if (providerRoles == null || providerRoles.size() == 0) {
 			return new ArrayList<Provider>();
@@ -2061,7 +2060,8 @@ public class HtmlFormEntryUtil {
 
 		ProviderManagementService providerManagementService = Context.getService(ProviderManagementService.class);
 		//Service returns list of org.openmrs.module.providermanagement.Provider, not org.openmrs.Provider
-		return new ArrayList<Provider>(providerManagementService.getProvidersByRoles(providerRoles));
+		return new ArrayList<Provider>(providerManagementService.
+				getProvidersByRolesForEnterprise(providerRoles, enterpriseGuid));
 	}
 
 	/**

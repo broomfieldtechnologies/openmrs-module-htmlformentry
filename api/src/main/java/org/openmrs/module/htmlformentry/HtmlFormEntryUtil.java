@@ -1090,7 +1090,7 @@ public class HtmlFormEntryUtil {
             }
             locations =  new ArrayList<Location>();
             String enterpriseGuid = Context.getLocationService().getEnterpriseForLoggedinUser();
-            locations.addAll(Context.getLocationService().getLocationsHavingAnyTagForEnterpriseGujid(tags, enterpriseGuid));
+            locations.addAll(Context.getLocationService().getLocationsHavingAnyTagForEnterpriseGuid(tags, enterpriseGuid));
         }
         return locations;
     }

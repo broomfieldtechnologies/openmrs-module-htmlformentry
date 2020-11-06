@@ -9,7 +9,9 @@ import org.openmrs.EncounterType;
 import org.openmrs.Location;
 import org.openmrs.LocationTag;
 import org.openmrs.Person;
+import org.openmrs.Provider;
 import org.openmrs.Role;
+import org.openmrs.api.ProviderService;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.htmlformentry.FormEntryContext;
 import org.openmrs.module.htmlformentry.FormEntryContext.Mode;
@@ -366,7 +368,7 @@ public class EncounterDetailSubmissionElement implements HtmlGeneratorElement, F
                     }
                     tags.add(tag);
                 }
-                locations.addAll(Context.getLocationService().getLocationsHavingAnyTagForEnterpriseGujid(tags, enterpriseGuid));
+                locations.addAll(Context.getLocationService().getLocationsHavingAnyTagForEnterpriseGuid(tags, enterpriseGuid));
             }
             // If the "order" attribute is passed in, limit to the specified locations in order
             else if (parameters.get("order") != null) {
@@ -508,12 +510,19 @@ public class EncounterDetailSubmissionElement implements HtmlGeneratorElement, F
             throw new RuntimeException(
                     "Programming error in HTML Form Entry module. This method should not be called before OpenMRS 1.9.");
         try {
-            Object providerService = Context.getService(Context.loadClass("org.openmrs.api.ProviderService"));
-            Method getProvidersMethod = providerService.getClass().getMethod("getAllProviders");
-            @SuppressWarnings("rawtypes")
-            List allProviders = (List) getProvidersMethod.invoke(providerService);
+			/*
+			 * Object providerService =
+			 * Context.getService(Context.loadClass("org.openmrs.api.ProviderService"));
+			 * Method getProvidersMethod =
+			 * providerService.getClass().getMethod("getAllProviders");
+			 * 
+			 * @SuppressWarnings("rawtypes") List allProviders = (List)
+			 * getProvidersMethod.invoke(providerService);
+			 */
+        	String enterpriseGuid = Context.getLocationService().getEnterpriseForLoggedinUser();
+        	List<Provider> providers = Context.getProviderService().getAllProvidersForEnterprise(false, enterpriseGuid);
             List<Object> ret = new ArrayList<Object>();
-            for (Object provider : allProviders) {
+            for (Provider provider : providers) {
                 Person person = (Person) PropertyUtils.getProperty(provider, "person");
                 if (person != null)
                     ret.add(provider);

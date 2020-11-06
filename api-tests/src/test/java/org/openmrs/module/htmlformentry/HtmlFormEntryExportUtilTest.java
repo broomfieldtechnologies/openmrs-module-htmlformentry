@@ -6,12 +6,14 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.openmrs.Encounter;
+import org.openmrs.EncounterRole;
 import org.openmrs.EncounterType;
 import org.openmrs.Form;
 import org.openmrs.Obs;
 import org.openmrs.PatientIdentifierType;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.htmlformentry.export.HtmlFormEntryExportUtil;
+import org.openmrs.module.providermanagement.Provider;
 import org.openmrs.test.BaseModuleContextSensitiveTest;
 import org.openmrs.test.Verifies;
 
@@ -99,8 +101,10 @@ public class HtmlFormEntryExportUtilTest extends BaseModuleContextSensitiveTest 
         e.setDateCreated(new Date());
         e.setEncounterDatetime(date);
         e.setLocation(Context.getLocationService().getLocation(2));
-        e.setProvider(Context.getPersonService().getPerson(502));
-        
+        EncounterRole erole = new EncounterRole();
+		Provider provider = new Provider();
+		provider.setPerson(Context.getPersonService().getPerson(502));
+		e.setProvider(erole, provider);        
         TestUtil.addObs(e, 2474, Context.getConceptService().getConcept(656), date);
         TestUtil.addObs(e, 3017, Context.getConceptService().getConcept(767), date);
         TestUtil.addObs(e, 3032, new Date(), date); 
@@ -227,8 +231,10 @@ public class HtmlFormEntryExportUtilTest extends BaseModuleContextSensitiveTest 
         e.setDateCreated(new Date());
         e.setEncounterDatetime(date);
         e.setLocation(Context.getLocationService().getLocation(2));
-        e.setProvider(Context.getPersonService().getPerson(502));
-        //top of form
+        EncounterRole erole = new EncounterRole();
+		Provider provider = new Provider();
+		provider.setPerson(Context.getPersonService().getPerson(502));
+		e.setProvider(erole, provider);        //top of form
         TestUtil.addObs(e, 3032, date, date);
         TestUtil.addObs(e, 1441, Context.getConceptService().getConcept(656), date);
         TestUtil.addObsGroup(e, 1004, date, 1005, Context.getConceptService().getConcept(1001), new Date());
@@ -295,8 +301,10 @@ public class HtmlFormEntryExportUtilTest extends BaseModuleContextSensitiveTest 
         e.setDateCreated(new Date());
         e.setEncounterDatetime(date);
         e.setLocation(Context.getLocationService().getLocation(2));
-        e.setProvider(Context.getPersonService().getPerson(502));
-        
+        EncounterRole erole = new EncounterRole();
+		Provider provider = new Provider();
+		provider.setPerson(Context.getPersonService().getPerson(502));
+		e.setProvider(erole, provider);        
         Context.getEncounterService().saveEncounter(e);
         encounters.add(e);
 
@@ -339,8 +347,10 @@ public class HtmlFormEntryExportUtilTest extends BaseModuleContextSensitiveTest 
         e.setDateCreated(new Date());
         e.setEncounterDatetime(date);
         e.setLocation(Context.getLocationService().getLocation(2));
-        e.setProvider(Context.getPersonService().getPerson(502));
-        
+        EncounterRole erole = new EncounterRole();
+		Provider provider = new Provider();
+		provider.setPerson(Context.getPersonService().getPerson(502));
+		e.setProvider(erole, provider);        
         
         TestUtil.addObs(e, 1119, date, date);
         TestUtil.addObs(e, 1007, date, date);

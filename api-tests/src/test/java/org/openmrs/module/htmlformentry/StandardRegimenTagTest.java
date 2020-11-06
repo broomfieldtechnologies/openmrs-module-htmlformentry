@@ -14,11 +14,13 @@ import org.junit.Before;
 import org.junit.Test;
 import org.openmrs.DrugOrder;
 import org.openmrs.Encounter;
+import org.openmrs.EncounterRole;
 import org.openmrs.GlobalProperty;
 import org.openmrs.Order;
 import org.openmrs.Patient;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.htmlformentry.regimen.RegimenUtil;
+import org.openmrs.module.providermanagement.Provider;
 import org.openmrs.order.DrugOrderSupport;
 import org.openmrs.order.RegimenSuggestion;
 import org.openmrs.test.BaseModuleContextSensitiveTest;
@@ -99,7 +101,7 @@ protected final Log log = LogFactory.getLog(getClass());
 					if (!drugsInOrder.remove(((DrugOrder) o).getDrug().getId())) {
 						Assert.assertTrue(false);
 					}
-					Assert.assertTrue(dateAsString(o.getStartDate()).equals(dateAsString(date)));
+					Assert.assertTrue(dateAsString(o.getDateActivated()).equals(dateAsString(date)));
 				}
 			}
 		}.run();
@@ -230,9 +232,9 @@ protected final Log log = LogFactory.getLog(getClass());
 				for (Order o : e.getOrders()){
 					if (o instanceof DrugOrder == false)
 						Assert.assertTrue(false);
-					Assert.assertTrue(dateAsString(o.getStartDate()).equals(dateAsString(date)));
+					Assert.assertTrue(dateAsString(o.getDateActivated()).equals(dateAsString(date)));
 					Assert.assertTrue(o.isDiscontinued(new Date(date.getTime() + 5000)));
-					Assert.assertTrue(o.getDiscontinuedReason().getConceptId().equals(102));
+					//Assert.assertTrue(o.getVoidReason()getConceptId().equals(102));
 				}
 			}
 		}.run();
@@ -267,7 +269,10 @@ protected final Log log = LogFactory.getLog(getClass());
 				Patient p = Context.getPatientService().getPatient(2);
 				e.setPatient(p);
 				e.setEncounterDatetime(date);
-				e.setProvider(Context.getPersonService().getPerson(502));
+				EncounterRole erole= new EncounterRole();
+				Provider provider = new Provider();
+				provider.setPerson(Context.getPersonService().getPerson(502));
+				e.setProvider(erole, provider);				
 				e.setEncounterType(Context.getEncounterService().getEncounterType(1));
 				e.setLocation(Context.getLocationService().getLocation(2));
 
@@ -276,11 +281,11 @@ protected final Log log = LogFactory.getLog(getClass());
 				RegimenSuggestion rsug = RegimenUtil.getStandardRegimenByCode(rs, "all3");
 				Set<Order> dors = RegimenUtil.standardRegimenToDrugOrders(rsug, date, p);
 				for (Order o : dors){
-					o.setDiscontinuedDate(new Date(date.getTime() + 10));
-					o.setDiscontinuedBy(Context.getAuthenticatedUser());
-					o.setDiscontinuedReason(Context.getConceptService().getConcept(102));
-					o.setDiscontinued(true);
-					o.setDiscontinuedReasonNonCoded("non-coded reason");
+					o.setDateVoided(new Date(date.getTime() + 10));
+					o.setVoidedBy(Context.getAuthenticatedUser());
+					o.setVoidReason(HtmlFormEntryUtil.getConcept("102").getDisplayString());
+					o.setVoided(true);
+					o.setVoidReason("non-coded reason");
 					e.addOrder(o);
 				}	
 				//save so interceptor sets missing mandatory values
@@ -312,12 +317,15 @@ protected final Log log = LogFactory.getLog(getClass());
 				Patient p = Context.getPatientService().getPatient(2);
 				e.setPatient(p);
 				e.setEncounterDatetime(date);
-				e.setProvider(Context.getPersonService().getPerson(502));
-				e.setEncounterType(Context.getEncounterService().getEncounterType(1));
+				EncounterRole erole= new EncounterRole();
+				Provider provider = new Provider();
+				provider.setPerson(Context.getPersonService().getPerson(502));
+				e.setProvider(erole, provider);					e.setEncounterType(Context.getEncounterService().getEncounterType(1));
 				e.setLocation(Context.getLocationService().getLocation(2));
 
 				//add standard regimen to encounter:
-				List<RegimenSuggestion> rs = Context.getOrderService().getStandardRegimens();
+				
+				List<RegimenSuggestion> rs = DrugOrderSupport.getInstance().getStandardRegimens();
 				RegimenSuggestion rsug = RegimenUtil.getStandardRegimenByCode(rs, "drug2and3");
 				Set<Order> dors = RegimenUtil.standardRegimenToDrugOrders(rsug, date, p);
 				for (Order o : dors){

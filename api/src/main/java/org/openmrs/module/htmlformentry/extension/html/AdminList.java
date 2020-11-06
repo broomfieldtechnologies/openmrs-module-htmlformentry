@@ -18,7 +18,7 @@ import java.util.Map;
 
 import org.openmrs.module.Extension;
 import org.openmrs.module.htmlformentry.HtmlFormEntryUtil;
-import org.openmrs.module.web.extension.AdministrationSectionExt;
+import org.openmrs.module.htmlformentry.extension.html.AdministrationSectionExt;
 import org.openmrs.util.PrivilegeConstants;
 
 /**

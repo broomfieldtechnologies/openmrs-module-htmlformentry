@@ -6,6 +6,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.openmrs.Concept;
 import org.openmrs.ConceptAnswer;
+import org.openmrs.ConceptName;
 import org.openmrs.DrugOrder;
 import org.openmrs.Order;
 import org.openmrs.api.APIException;
@@ -162,15 +163,17 @@ public class StandardRegimenElement implements HtmlGeneratorElement, FormSubmiss
 		        } else {
 		            // use the listed discontinueReasons, and use their ConceptNames.
     		        for (Concept c: discReasons){
-    		            discOptions.add(new Option( c.getBestName(Context.getLocale()).getName(), c.getConceptId().toString(),false));
-    		            srf.addDiscontinuedReasonAnswer(new ObsFieldAnswer(c.getBestName(Context.getLocale()).getName(), c));
+    		        	ConceptName cn = c.getName(Context.getLocale());
+    		        	
+    		            discOptions.add(new Option( cn.getName(),cn.getName(),false));
+    		            srf.addDiscontinuedReasonAnswer(new ObsFieldAnswer(c.getName(Context.getLocale()).getName(), c));
     		        }
 		        }
 		    } else {
 		        //just use the conceptAnswers
     		    for (ConceptAnswer ca : discontineReasonConcept.getAnswers()){
-    		        discOptions.add(new Option( ca.getAnswerConcept().getBestName(Context.getLocale()).getName(), ca.getAnswerConcept().getConceptId().toString(),false));
-    		        srf.addDiscontinuedReasonAnswer(new ObsFieldAnswer(ca.getAnswerConcept().getBestName(Context.getLocale()).getName(), ca.getAnswerConcept()));
+    		        discOptions.add(new Option( ca.getAnswerConcept().getName(Context.getLocale()).getName(), ca.getAnswerConcept().getConceptId().toString(),false));
+    		        srf.addDiscontinuedReasonAnswer(new ObsFieldAnswer(ca.getAnswerConcept().getName(Context.getLocale()).getName(), ca.getAnswerConcept()));
     		    }
 		    }
 		    if (discOptions.size() == 1)
@@ -211,17 +214,17 @@ public class StandardRegimenElement implements HtmlGeneratorElement, FormSubmiss
 	    		regWidget.setInitialValue(existingStandardRegimen.getCodeName());
 	    	}
 	    	 discontinuedDateWidget.setInitialValue(getCommonDiscontinueDate(regDrugOrders));
-	    	    if (discontinuedReasonWidget != null && regDrugOrders.get(0).getDiscontinuedReason() != null)
-	    	        discontinuedReasonWidget.setInitialValue(regDrugOrders.get(0).getDiscontinuedReason().getConceptId());
-	    }
+	    	    if (discontinuedReasonWidget != null && regDrugOrders.get(0).getVoidReason() != null)
+	    	        discontinuedReasonWidget.setInitialValue(regDrugOrders.get(0).getVoidReason());
+	    } 
     }
 	
 	protected Date getCommonDiscontinueDate(List<DrugOrder> orders){
 		Date candidate = null;
 		if (orders != null & orders.size() > 0)
-				candidate = orders.get(0).getDiscontinuedDate();
+				candidate = orders.get(0).getDateVoided();
 		for (Order o : orders){
-			if (!OpenmrsUtil.nullSafeEquals(o.getDiscontinuedDate(), candidate))
+			if (!OpenmrsUtil.nullSafeEquals(o.getDateVoided(), candidate))
 				return null;
 		}
 		return candidate;
@@ -345,12 +348,12 @@ public class StandardRegimenElement implements HtmlGeneratorElement, FormSubmiss
 	    	//the drug orders are already there and attached to the encounter.
 	    	for (Order o : regDrugOrders){
 	        	if (!StringUtils.isEmpty(discontinuedReasonStr))
-	        	    o.setDiscontinuedReason(HtmlFormEntryUtil.getConcept(discontinuedReasonStr));
+	        	    o.setVoidReason(HtmlFormEntryUtil.getConcept(discontinuedReasonStr).getDisplayString());
 	    		if (discontinuedDate != null){
-	        	    o.setDiscontinuedDate(discontinuedDate);
-	        	    o.setDiscontinued(true); 
+	        	    o.setDateVoided(discontinuedDate);
+	        	    o.setVoided(true); 
 	    		}    
-	    		o.setStartDate(startDate);
+	    		o.setDateActivated(startDate);
 	    	}
 	    } else {
 	    	//standard regimen changed in the drop-down...  I'm going to have this void the old DrugOrders, and create new ones.
@@ -372,11 +375,11 @@ public class StandardRegimenElement implements HtmlGeneratorElement, FormSubmiss
 	    	if (o.getUuid() == null)
 	    	    o.setUuid(UUID.randomUUID().toString());
 	    	if (!StringUtils.isEmpty(discontinuedReasonStr))
-	    	    o.setDiscontinuedReason(HtmlFormEntryUtil.getConcept(discontinuedReasonStr));
+	    	    o.setVoidReason((HtmlFormEntryUtil.getConcept(discontinuedReasonStr)).getDisplayString());
 	    	if (discontinuedDate != null){
-	    	    o.setDiscontinuedDate(discontinuedDate);
-	    	    o.setDiscontinued(true);
-	    	    o.setDiscontinuedBy(Context.getAuthenticatedUser());
+	    	    o.setDateVoided(discontinuedDate);
+	    	    o.setVoided(true);
+	    	    o.setVoidedBy(Context.getAuthenticatedUser());
 	    	}    
 	    	session.getSubmissionActions().getCurrentEncounter().addOrder(o);
 	    }

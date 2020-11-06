@@ -73,7 +73,7 @@ public class CompleteProgramTagTest extends BaseModuleContextSensitiveTest {
 				Program program = Context.getProgramWorkflowService().getProgram(1);
 				
 				// as a sanity check, make sure the patient is currently enrolled in the program before we run the test
-				Assert.assertTrue("Patient should be in program", Context.getProgramWorkflowService().isInProgram(patient, program, new Date(), null));
+				Assert.assertTrue("Patient should be in program", Context.getProgramWorkflowService().getPatientPrograms(patient, program, null,null, null, null, false)!=null);
 				
 				return patient;
 			};
@@ -102,10 +102,10 @@ public class CompleteProgramTagTest extends BaseModuleContextSensitiveTest {
 				// confirm that that patient is no longer in the program
 				Patient patient = Context.getPatientService().getPatient(2);
 				Program program = Context.getProgramWorkflowService().getProgram(1);
-				Assert.assertFalse("Patient should no longer be in program", Context.getProgramWorkflowService().isInProgram(patient, program, new Date(), null));
+				Assert.assertFalse("Patient should no longer be in program", Context.getProgramWorkflowService().getPatientPrograms(patient, program, null,null, null, null, false)!=null);
 				
 				// but confirm that the patient was in the program in the past
-				Assert.assertTrue("Patient should still be in program in the past", Context.getProgramWorkflowService().isInProgram(patient, program, null, new Date()));	
+				Assert.assertTrue("Patient should still be in program in the past", Context.getProgramWorkflowService().getPatientPrograms(patient, program, null,null, null, null, false)!=null);	
 				
 				// confirm that the proper program has been closed
 				PatientProgram pp = Context.getProgramWorkflowService().getPatientProgramByUuid("32296060-03aa-102d-b0e3-001ec94a0cc5");
@@ -153,10 +153,10 @@ public class CompleteProgramTagTest extends BaseModuleContextSensitiveTest {
 				// confirm that that patient is no longer in the program
 				Patient patient = Context.getPatientService().getPatient(2);
 				Program program = Context.getProgramWorkflowService().getProgram(1);
-				Assert.assertFalse("Patient should no longer be in program", Context.getProgramWorkflowService().isInProgram(patient, program, new Date(), null));
+				Assert.assertFalse("Patient should no longer be in program", Context.getProgramWorkflowService().getPatientPrograms(patient, program, null,null, null, null, false)!=null);
 				
 				// but confirm that the patient was in the program in the past
-				Assert.assertTrue("Patient should still be in program in the past", Context.getProgramWorkflowService().isInProgram(patient, program, null, new Date()));	
+				Assert.assertTrue("Patient should still be in program in the past", Context.getProgramWorkflowService().getPatientPrograms(patient, program, null,null, null, null, false)!=null);	
 				
 				// confirm that the proper program has been closed
 				PatientProgram pp = Context.getProgramWorkflowService().getPatientProgramByUuid("32296060-03aa-102d-b0e3-001ec94a0cc5");
@@ -184,7 +184,7 @@ public class CompleteProgramTagTest extends BaseModuleContextSensitiveTest {
                 Program program = Context.getProgramWorkflowService().getProgram(10);
 
                 // as a sanity check, make sure the patient is currently enrolled in the program before we run the test
-                Assert.assertTrue("Patient should be in program", Context.getProgramWorkflowService().isInProgram(patient, program, new Date(), null));
+                Assert.assertTrue("Patient should be in program", Context.getProgramWorkflowService().getPatientPrograms(patient, program, null,null, null, null, false)!=null);
 
                 return patient;
             };
@@ -214,10 +214,10 @@ public class CompleteProgramTagTest extends BaseModuleContextSensitiveTest {
                 // confirm that that patient is no longer in the program
                 Patient patient = Context.getPatientService().getPatient(8);
                 Program program = Context.getProgramWorkflowService().getProgram(10);
-                Assert.assertFalse("Patient should no longer be in program", Context.getProgramWorkflowService().isInProgram(patient, program, new Date(), null));
+                Assert.assertFalse("Patient should no longer be in program", Context.getProgramWorkflowService().getPatientPrograms(patient, program, null,null, null, null, false)!=null);
 
                 // but confirm that the patient was in the program in the past
-                Assert.assertTrue("Patient should still be in program in the past", Context.getProgramWorkflowService().isInProgram(patient, program, null, new Date()));
+                Assert.assertTrue("Patient should still be in program in the past", Context.getProgramWorkflowService().getPatientPrograms(patient, program, null,null, null, null, false)!=null);
 
                 // confirm that the proper program has been closed
                 PatientProgram pp = Context.getProgramWorkflowService().getPatientProgramByUuid("31396060-03aa-102d-b0e3-001ec94a0cc5");
@@ -254,7 +254,7 @@ public class CompleteProgramTagTest extends BaseModuleContextSensitiveTest {
 				Program program = Context.getProgramWorkflowService().getProgram(1);
 
 				// as a sanity check, make sure the patient is currently enrolled in the program before we run the test
-				Assert.assertTrue("Patient should be in program", Context.getProgramWorkflowService().isInProgram(patient, program, new Date(), null));
+				Assert.assertTrue("Patient should be in program", Context.getProgramWorkflowService().getPatientPrograms(patient, program, null,null, null, null, false)!=null);
 
 				return patient;
 			};
@@ -283,10 +283,10 @@ public class CompleteProgramTagTest extends BaseModuleContextSensitiveTest {
 				// confirm that that patient is no longer in the program
 				Patient patient = Context.getPatientService().getPatient(2);
 				Program program = Context.getProgramWorkflowService().getProgram(1);
-				Assert.assertFalse("Patient should no longer be in program", Context.getProgramWorkflowService().isInProgram(patient, program, new Date(), null));
+				Assert.assertFalse("Patient should no longer be in program", Context.getProgramWorkflowService().getPatientPrograms(patient, program, null,null, null, null, false)!=null);
 
 				// but confirm that the patient was in the program in the past
-				Assert.assertTrue("Patient should still be in program in the past", Context.getProgramWorkflowService().isInProgram(patient, program, null, new Date()));
+				Assert.assertTrue("Patient should still be in program in the past", Context.getProgramWorkflowService().getPatientPrograms(patient, program, null,null, null, null, false)!=null);
 
 				// confirm that the proper program has been closed
 				PatientProgram pp = Context.getProgramWorkflowService().getPatientProgramByUuid("32296060-03aa-102d-b0e3-001ec94a0cc5");

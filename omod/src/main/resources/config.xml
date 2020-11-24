@@ -16,7 +16,7 @@
 	<updateURL>https://modules.openmrs.org/modules/download/@MODULE_ID@/update.rdf</updateURL>
 	<!-- /Base Module Properties -->
 
-	<require_version>1.11.3, 1.10.2 - 1.10.*, 1.9.9 - 1.9.*</require_version>
+	<require_version>1.11.3, 1.10.2 - 1.10.*, 1.9.9 - 1.9.*, 2.*.*</require_version>
 
 	<aware_of_modules>
 	    <aware_of_module>org.openmrs.module.legacyui</aware_of_module>
@@ -30,7 +30,7 @@
 		<class>org.openmrs.module.htmlformentry.extension.html.AdminList</class>
 	</extension>
 	<extension>
-		<point>org.openmrs.module.web.extension.FormEntryHandler</point>
+		<point>org.openmrs.module.htmlformentry.handler.FormEntryHandler</point>
 		<class>org.openmrs.module.htmlformentry.extension.html.FormEntryHandlerExtension</class>
 	</extension>
 

@@ -11,9 +11,9 @@ import org.openmrs.Form;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.htmlformentry.HtmlForm;
 import org.openmrs.module.htmlformentry.HtmlFormEntryUtil;
-//import org.openmrs.module.web.FormEntryContext;
-import org.openmrs.module.htmlformentry.FormEntryContext;
-import org.openmrs.module.htmlformentry.handler.FormEntryHandler;
+import org.openmrs.module.web.FormEntryContext;
+//import org.openmrs.module.htmlformentry.FormEntryContext;
+import org.openmrs.module.web.extension.FormEntryHandler;
 import org.openmrs.util.PrivilegeConstants;
 
 /**

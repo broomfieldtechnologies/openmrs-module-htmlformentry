@@ -27,12 +27,13 @@ public class HtmlFormsController {
 	 */
 	@RequestMapping("/module/htmlformentry/htmlForms")
 	public void manageHtmlForms(Model model) {
-		String enterpriseUuid = "";
+		/*String enterpriseUuid = "";
 		if (Context.getAuthenticatedUser() != null && Context.getAuthenticatedUser().getPerson() != null
 		        && Context.getAuthenticatedUser().getPerson().getAttribute("Enterprise") != null) {
 			enterpriseUuid = Context.getAuthenticatedUser().getPerson().getAttribute("Enterprise").getValue();
 		}	
-		model.addAttribute("forms", HtmlFormEntryUtil.getService().getAllHtmlFormsbyEnterpriseUuid(enterpriseUuid));
+		model.addAttribute("forms", HtmlFormEntryUtil.getService().getAllHtmlFormsbyEnterpriseUuid(enterpriseUuid));*/
+		model.addAttribute("forms", HtmlFormEntryUtil.getService().getAllHtmlForms());
 	}	
 
 }

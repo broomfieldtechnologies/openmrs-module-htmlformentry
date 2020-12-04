@@ -202,6 +202,7 @@
 		<openMRSMinorVersion>2.3.0</openMRSMinorVersion>
         <jacksonVersion>1.5.0</jacksonVersion>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<legacyuiVersion>1.5.0</legacyuiVersion>
 	</properties>
 
 	<modules>

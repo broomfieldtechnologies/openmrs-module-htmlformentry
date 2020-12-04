@@ -37,7 +37,12 @@
 			<groupId>org.openmrs.web</groupId>
 			<artifactId>openmrs-web</artifactId>
 		</dependency>
-
+		<dependency>
+			<groupId>org.openmrs.module</groupId>
+			<artifactId>legacyui-omod</artifactId>
+			<version>${legacyuiVersion}</version>
+			<scope>provided</scope>
+		</dependency>
 
 		<!-- jars we need to provide for compile but that will be provided at runtime 
 			(scope=provided) -->
